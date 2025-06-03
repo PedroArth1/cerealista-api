@@ -1,6 +1,7 @@
 package com.pedro.cerealista.models.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "TB_ITEM_VENDAS")
+@Table(name = "TB_ITEM_VENDA")
 @Entity
 public class SellItemModel {
         @Id
@@ -26,6 +27,7 @@ public class SellItemModel {
         @JoinColumn(name = "produto_id")
         private ProductModel produto;
 
+        @JsonIgnore
         @ManyToOne
         @JoinColumn(name = "venda_id")
         private SellModel venda;

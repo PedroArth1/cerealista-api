@@ -21,6 +21,7 @@ public class SellModel {
     private Long id;
 
     private LocalDate data;
+
     private BigDecimal valorTotal;
 
     @ManyToOne

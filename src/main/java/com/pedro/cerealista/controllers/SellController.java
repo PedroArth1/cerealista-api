@@ -29,33 +29,28 @@ public class SellController {
         return ResponseEntity.status(HttpStatus.OK).body(sellService.getAllSells());
     }
 
-    @GetMapping({"/id"})
-    public ResponseEntity<Object> getOneSell(@PathVariable(value="id") Long id) {
-        Optional<SellModel> sell0 = sellService.findById(id);
-        if (sell0.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Sell not found");
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(sell0.get());
+    @GetMapping("/{id}")
+    public ResponseEntity<SellModel> getOneSell(@PathVariable(value="id") Long id) {
+        return ResponseEntity.status(HttpStatus.OK).body(sellService.getSellById(id));
     }
 
+    // No Controller
     @PostMapping
-    public ResponseEntity<Object> saveSell(@RequestBody @Valid SellRecordDto sellRecordDto) {
-        var sellModel = new SellModel();
-        BeanUtils.copyProperties(sellRecordDto, sellModel);
-        SellModel v = sellService.save(sellModel);
-        System.out.println(v);
-        if (v.getId() != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body("Venda salva com sucesso.");
-        } else {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Erro ao salvar venda.");
+    public ResponseEntity<String> criarVenda(@RequestBody SellRecordDto dto) {
+        try {
+            SellModel vendaSalva = sellService.createSell(dto);
+            return ResponseEntity.ok("Venda criada com ID: " + vendaSalva.getId());
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
-    @DeleteMapping({"/id"})
+    @DeleteMapping("/{id}")
     public ResponseEntity<Object> deleteSell(@PathVariable(value="id") Long id){
-        boolean deletado = sellService.delete(id);
-        if (deletado){
-            return ResponseEntity.status(HttpStatus.OK).body("Sell deleted");
-        } return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Sell Not Found");
+        var deleted = sellService.delete(id);
+        if (deleted){
+            return ResponseEntity.status(HttpStatus.OK).body("Deletado");
+        } return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("Venda não encontrada");
     }
+
 }
