@@ -10,24 +10,21 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor
-@Getter
-@Setter
 @Entity
 @Table(name = "TB_VENDAS")
+@Getter @Setter @NoArgsConstructor
 public class SellModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private LocalDate data;
-
     private BigDecimal valorTotal;
 
     @ManyToOne
     @JoinColumn(name = "cliente_id")
     private ClientModel cliente;
 
-    @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+    @OneToMany(mappedBy = "venda", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<SellItemModel> itens = new ArrayList<>();
 }

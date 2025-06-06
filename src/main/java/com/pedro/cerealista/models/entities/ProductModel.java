@@ -25,5 +25,6 @@ public class ProductModel {
     private String tipo;
     private LocalDate validade;
     private BigDecimal preco;
-    private Integer quantidadeEstoque;
+    private BigDecimal precoCusto;
+    private BigDecimal quantidadeEstoque;
 }

@@ -18,7 +18,11 @@ public record ProductRecordDto(
         @DecimalMin(value = "0.01", message = "O preço deve ser maior que zero")
         @Digits(integer = 6, fraction = 2, message = "Preço deve ter no máximo 6 dígitos inteiros e 2 decimais")
         BigDecimal preco,
+        @NotNull(message = "O preço de custo é obrigatório")
+        @DecimalMin(value = "0.01", message = "O preço deve ser maior que zero")
+        @Digits(integer = 6, fraction = 2, message = "Preço deve ter no máximo 6 dígitos inteiros e 2 decimais")
+        BigDecimal precoCusto,
         @NotNull(message = "A quantidade em estoque é obrigatória")
         @Min(value = 0, message = "O estoque não pode ser negativo")
-        Integer quantidadeEstoque) {
+        BigDecimal quantidadeEstoque) {
 }

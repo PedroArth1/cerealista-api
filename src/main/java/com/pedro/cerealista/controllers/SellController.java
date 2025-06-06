@@ -1,56 +1,39 @@
 package com.pedro.cerealista.controllers;
 
 
-import com.pedro.cerealista.dtos.SellRecordDto;
-import com.pedro.cerealista.models.entities.ProductModel;
 import com.pedro.cerealista.models.entities.SellModel;
-import com.pedro.cerealista.repositories.ProductRepository;
-import com.pedro.cerealista.repositories.SellRepository;
 import com.pedro.cerealista.service.SellService;
-import jakarta.validation.Valid;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
-@RequestMapping("/sell")
+
 @RestController
+@RequestMapping("/api/vendas")
 public class SellController {
 
+    private final SellService sellService;
 
-    @Autowired
-    SellService sellService;
+    public SellController(SellService sellService) {
+        this.sellService = sellService;
+    }
 
-    @GetMapping
-    public ResponseEntity<List<SellModel>> getAllSells() {
-        return ResponseEntity.status(HttpStatus.OK).body(sellService.getAllSells());
+    @PostMapping
+    public ResponseEntity<SellModel> criarVenda(@RequestBody SellModel venda) {
+        SellModel vendaCriada = sellService.criarVenda(venda);
+        return ResponseEntity.status(HttpStatus.CREATED).body(vendaCriada);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<SellModel> getOneSell(@PathVariable(value="id") Long id) {
-        return ResponseEntity.status(HttpStatus.OK).body(sellService.getSellById(id));
+    public ResponseEntity<SellModel> getVenda(@PathVariable Long id) {
+        SellModel venda = sellService.getVenda(id);
+        return ResponseEntity.status(HttpStatus.OK).body(venda);
     }
 
-    // No Controller
-    @PostMapping
-    public ResponseEntity<String> criarVenda(@RequestBody SellRecordDto dto) {
-        try {
-            SellModel vendaSalva = sellService.createSell(dto);
-            return ResponseEntity.ok("Venda criada com ID: " + vendaSalva.getId());
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+    @GetMapping
+    public ResponseEntity<List<SellModel>> GetVendas() {
+        List<SellModel> vendas = sellService.GetAllSells();
+        return ResponseEntity.status(HttpStatus.OK).body(vendas);
     }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Object> deleteSell(@PathVariable(value="id") Long id){
-        var deleted = sellService.delete(id);
-        if (deleted){
-            return ResponseEntity.status(HttpStatus.OK).body("Deletado");
-        } return  ResponseEntity.status(HttpStatus.NOT_FOUND).body("Venda não encontrada");
-    }
-
 }

@@ -11,11 +11,12 @@ import com.pedro.cerealista.repositories.ProductRepository;
 import com.pedro.cerealista.repositories.SupplierRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-
+@Service
 public class BuyService {
 
     @Autowired
@@ -26,7 +27,6 @@ public class BuyService {
 
     @Autowired
     BuyRepository buyRepository;
-
 
     @Transactional
     public BuyModel criarCompra(BuyRecordDto dto) {
@@ -54,11 +54,12 @@ public class BuyService {
             produto.setQuantidadeEstoque(
                     produto.getQuantidadeEstoque().add(BigDecimal.valueOf(itemDto.quantidade()))
             );
+            productRepository.save(produto); // Garante persistência do estoque
         }
 
         // Calcula total
         compra.calcularValorTotal();
 
-        return buyRepository.save(compra);
+        return buyRepository.save(compra); // Corrigido aqui
     }
 }

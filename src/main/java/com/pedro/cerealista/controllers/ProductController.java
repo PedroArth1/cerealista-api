@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-@RequestMapping("/products")
+@CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping("/api/produtos")
 @RestController
 public class ProductController {
 
@@ -60,5 +61,14 @@ public class ProductController {
         }
         productRepository.delete(productO.get());
         return ResponseEntity.status(HttpStatus.OK).body("Product deleted successfully.");
+    }
+
+    @GetMapping("/likenome/{nome}")
+    public ResponseEntity<List<ProductModel>> getProductsByName(@PathVariable String nome) {
+        List<ProductModel> products = productRepository.buscarLikeNome(nome);
+        if (products.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(products);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(products);
     }
 }

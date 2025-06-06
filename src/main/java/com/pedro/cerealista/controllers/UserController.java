@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-@RequestMapping("/users")
+@RequestMapping("/api/usuarios")
 @RestController
 public class UserController {
 
@@ -54,4 +54,13 @@ public class UserController {
     }
 
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Object> deleteUser(@PathVariable(value = "id") Long id) {
+        Optional<UserModel> user0 = userRepository.findById(id);
+        if (user0.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+        userRepository.delete(user0.get());
+        return ResponseEntity.status(HttpStatus.OK).body("User deleted successfully");
+    }
 }

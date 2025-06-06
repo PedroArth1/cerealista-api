@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
-
-@RequestMapping("/clients")
+@RequestMapping("/api/clientes")
 @RestController
 public class ClientsController {
 
@@ -61,5 +60,10 @@ public class ClientsController {
         }
         clientRepository.delete(clientO.get());
         return ResponseEntity.status(HttpStatus.OK).body("Client deleted successfully.");
+    }
+
+    @GetMapping("/likenome/{nome}")
+    public ResponseEntity<List<ClientModel>> buscarLikeNome(@PathVariable String nome) {
+        return ResponseEntity.status(HttpStatus.OK).body(clientRepository.buscarLikeNome(nome));
     }
 }
