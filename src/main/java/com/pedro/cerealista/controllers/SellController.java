@@ -36,4 +36,5 @@ public class SellController {
         List<SellModel> vendas = sellService.GetAllSells();
         return ResponseEntity.status(HttpStatus.OK).body(vendas);
     }
+
 }
